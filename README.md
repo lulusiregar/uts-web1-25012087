@@ -1,7 +1,7 @@
 # UTS Web I - Pemesanan Kantin Kampus
 
 ## Identitas Mahasiswa
-- Nama  : Lulu' Khairunnisa
+- Nama  : Lulu' Khairunnisa Siregar
 - NIM   : 25012087
 - Kelas : 25M31
 
