@@ -39,3 +39,45 @@ nav a {
 footer {
     margin-top: 30px;
 }
+
+
+input,
+select,
+button {
+    padding: 10px;
+    margin: 5px 3px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background: #263238;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #455a64;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background: #eceff1;
+}
+
+.error {
+    color: #c62828;
+    font-weight: bold;
+}
