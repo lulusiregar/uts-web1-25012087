@@ -61,10 +61,11 @@ Dokumentasi pengujian aplikasi Pemesanan Kantin Kampus.
 | U07b | Refresh halaman setelah POST | Setelah halaman di-refresh, jumlah item tidak bertambah dan flash message tidak muncul kembali | Lulus | [Screenshot](/dokumentasi/pengujian/U07b-setelah-refresh.png) |
 | U08a | Subtotal Rp49.000 | Diskon Rp0 dan total Rp49.000 | Subtotal Rp49.000 tampil dengan diskon Rp0 dan total akhir Rp49.000 | Lulus | [Screenshot](/dokumentasi/pengujian/U08a-subtotal-49000.png) |
 | U08b | Subtotal Rp50.000 | Diskon Rp5.000 dan total Rp45.000 | Subtotal Rp50.000 tampil dengan diskon Rp5.000 dan total akhir Rp45.000 | Lulus | [Screenshot](/dokumentasi/pengujian/U08b-subtotal-50000.png) |
-| U09a |
-| U09b |
-| U10a |
-| U10b |
-| U10c |
+| U09a | Menghapus satu item | Item terhapus dan total diperbarui | Es Teh berhasil dihapus, Nasi Goreng tetap tersedia, dan total diperbarui | Lulus | [Screenshot](/dokumentasi/pengujian/U09a-hapus-item.png) |
+| U09b | Mengosongkan keranjang | Keranjang kosong dan pesan yang sesuai tampil | Keranjang berhasil dikosongkan dan pesan kondisi keranjang kosong tampil | Lulus | [Screenshot](/dokumentasi/pengujian/U09b-keranjang-kosong.png) |
+| U10a | Menyimpan kategori favorit | Cookie tersimpan dengan masa berlaku 7 hari | Cookie kategori_favorit tersimpan dengan nilai Makanan dan masa berlaku 7 hari | Lulus | [Screenshot](/dokumentasi/pengujian/U10a-cookie-kategori.png) |
+| U10b | Membuka halaman tanpa parameter kategori | Kategori mengikuti cookie | Tanpa parameter kategori GET, pilihan kategori mengikuti cookie Makanan | Lulus | [Screenshot](/dokumentasi/pengujian/U10b-kategori-cookie.png) |
+| U10c | Memilih kategori melalui GET yang berbeda | Kategori GET mengutamakan cookie | Parameter GET kategori=Minuman mengalahkan cookie Makanan | Lulus | [Screenshot](/dokumentasi/pengujian/U10c-prioritas-get.png) |
+| U11 | Memasukkan teks <b>uji</b> pada pencarian | Teks tampil biasa dan tidak dirender sebagai HTML | Input tetap tampil sebagai teks <b>uji</b> | Lulus | [Screenshot](/dokumentasi/pengujian/U11-input-html.png) |
 
 Screenshot pengujian akan ditambahkan pada setiap tahap.
