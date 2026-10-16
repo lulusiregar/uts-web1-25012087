@@ -1,10 +1,40 @@
-
 <?php
 require_once 'includes/fungsi.php';
 require_once 'data/menu.php';
 
 $cari = trim($_GET['cari'] ?? '');
-$kategori = $_GET['kategori'] ?? '';
+
+$kategoriTersedia = array_unique(
+    array_column($menu, 'kategori')
+);
+
+if (array_key_exists('kategori', $_GET)) {
+    $inputKategori = $_GET['kategori'];
+
+    if (
+        is_string($inputKategori) &&
+        (
+            $inputKategori === '' ||
+            in_array(
+                $inputKategori,
+                $kategoriTersedia,
+                true
+            )
+        )
+    ) {
+        $kategori = $inputKategori;
+    } else {
+        $kategori = '';
+    }
+} else {
+    $kategoriCookie = $_COOKIE['kategori_favorit'] ?? '';
+
+    $kategori = in_array(
+        $kategoriCookie,
+        $kategoriTersedia,
+        true
+    ) ? $kategoriCookie : '';
+}
 
 $hasilMenu = [];
 
