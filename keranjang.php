@@ -38,7 +38,9 @@ require_once 'includes/header.php';
 
         <tbody>
             <?php
-            $total = 0;
+            $totalSubtotal = hitungSubtotal($keranjang, $menu);
+            $diskon = hitungDiskon($totalSubtotal);
+            $totalAkhir = hitungTotal($totalSubtotal, $diskon);
 
             foreach ($keranjang as $kode => $jumlah):
                 if (!isset($menu[$kode])) {
@@ -47,53 +49,55 @@ require_once 'includes/header.php';
 
                 $item = $menu[$kode];
                 $subtotal = $item['harga'] * $jumlah;
-                $total += $subtotal;
             ?>
 
-                <tr>
-                    <td><?= e($item['nama']) ?></td>
-                    <td><?= rupiah($item['harga']) ?></td>
-                    <td><?= e($jumlah) ?></td>
-                    <td><?= rupiah($subtotal) ?></td>
-                    <td>
-                        <form action="proses.php" method="POST">
-                            <input
-                                type="hidden"
-                                name="aksi"
-                                value="hapus"
-                            >
+            <tr>
+                <td><?= e($item['nama']) ?></td>
+                <td><?= rupiah($item['harga']) ?></td>
+                <td><?= e($jumlah) ?></td>
+                <td><?= rupiah($subtotal) ?></td>
+                <td>
+                    <form action="proses.php" method="POST">
+                        <input
+                            type="hidden"
+                            name="aksi"
+                            value="hapus"
+                        >
 
-                            <input
-                                type="hidden"
-                                name="kode_menu"
-                                value="<?= e($kode) ?>"
-                            >
+                        <input
+                            type="hidden"
+                            name="kode_menu"
+                            value="<?= e($kode) ?>"
+                        >
 
-                            <button type="submit">Hapus</button>
-                        </form>
-                    </td>
-                </tr>
+                        <button type="submit">Hapus</button>
+                    </form>
+                </td>
+            </tr>
 
             <?php endforeach; ?>
         </tbody>
     </table>
+    
+    <CodeBlock language="php" editable>
+        <p>Subtotal: <?= rupiah($totalSubtotal) ?></p>
+        <p>Diskon: <?= rupiah($diskon) ?></p>
+        <h3>Total akhir: <?= rupiah($totalAkhir) ?></h3>
+        
+        <form action="proses.php" method="POST">
+            <input
+                type="hidden"
+                name="aksi"
+                value="kosongkan"
+            >
 
-    <h3>Total sementara: <?= rupiah($total) ?></h3>
+            <button type="submit">Kosongkan Keranjang</button>
+        </form>
 
-    <form action="proses.php" method="POST">
-        <input
-            type="hidden"
-            name="aksi"
-            value="kosongkan"
-        >
+    <?php endif; ?>
 
-        <button type="submit">Kosongkan Keranjang</button>
-    </form>
+    <p>
+        <a href="index.php">Kembali ke daftar menu</a>
+    </p>
 
-<?php endif; ?>
-
-<p>
-    <a href="index.php">Kembali ke daftar menu</a>
-</p>
-
-<?php require_once 'includes/footer.php'; ?>
+    <?php require_once 'includes/footer.php'; ?>

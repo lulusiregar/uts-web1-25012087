@@ -21,3 +21,27 @@ function rupiah($angka) {
         '.'
     );
 }
+
+function hitungSubtotal($keranjang, $menu) {
+    $subtotal = 0;
+
+    foreach ($keranjang as $kode => $jumlah) {
+        if (isset($menu[$kode])) {
+            $subtotal += $menu[$kode]['harga'] * $jumlah;
+        }
+    }
+
+    return $subtotal;
+}
+
+function hitungDiskon($subtotal) {
+    if ($subtotal >= 50000) {
+        return $subtotal * 0.10;
+    }
+
+    return 0;
+}
+
+function hitungTotal($subtotal, $diskon) {
+    return $subtotal - $diskon;
+}
