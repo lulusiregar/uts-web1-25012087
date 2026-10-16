@@ -103,4 +103,41 @@ require_once 'includes/header.php';
 
 <?php endif; ?>
 
+
+<hr>
+
+<h2>Form Pemesanan</h2>
+
+<form action="proses.php" method="POST">
+    <label for="kode_menu">Pilih Menu:</label>
+
+    <select name="kode_menu" id="kode_menu" required>
+        <?php foreach ($menu as $kode => $item): ?>
+            <option value="<?= e($kode) ?>">
+                <?= e($kode) ?> -
+                <?= e($item['nama']) ?> -
+                Rp<?= number_format($item['harga'], 0, ',', '.') ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+
+    <br>
+
+    <label for="jumlah">Jumlah Pembelian:</label>
+
+    <input
+        type="number"
+        name="jumlah"
+        id="jumlah"
+        min="1"
+        max="10"
+        step="1"
+        required
+    >
+
+    <br>
+
+    <button type="submit">Pesan Menu</button>
+</form>
+
 <?php require_once 'includes/footer.php'; ?>
