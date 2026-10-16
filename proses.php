@@ -1,84 +1,75 @@
 
 <?php
+require_once 'includes/fungsi.php';
 require_once 'data/menu.php';
 
-function e($teks) {
-    return htmlspecialchars(
-        (string) $teks,
-        ENT_QUOTES,
-        'UTF-8'
-    );
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: index.php');
+    exit;
 }
 
-$pesanError = [];
-$pesanSukses = '';
+if (!isset($_SESSION['keranjang'])) {
+    $_SESSION['keranjang'] = [];
+}
 
-$kode = '';
-$jumlahInput = '';
+$aksi = $_POST['aksi'] ?? 'tambah';
+$pesan = '';
+$tipe = 'error';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($aksi === 'tambah') {
     $kode = $_POST['kode_menu'] ?? '';
-    $jumlahInput = $_POST['jumlah'] ?? '';
+    $inputJumlah = $_POST['jumlah'] ?? '';
 
-    // Validasi kode menu
-    if (
-        !is_string($kode) ||
-        !array_key_exists($kode, $menu)
+    if (!is_string($kode) || !isset($menu[$kode])) {
+        $pesan = 'Kode menu tidak valid.';
+    } elseif (
+        !is_string($inputJumlah) ||
+        !preg_match('/^[0-9]+$/', $inputJumlah)
     ) {
-        $pesanError[] = 'Kode menu tidak valid.';
-    }
-
-    // Validasi jumlah harus berupa bilangan bulat
-    if (
-        !is_string($jumlahInput) ||
-        !preg_match('/^[0-9]+$/', $jumlahInput)
-    ) {
-        $pesanError[] = 'Jumlah harus berupa bilangan bulat.';
+        $pesan = 'Jumlah harus berupa bilangan bulat.';
     } else {
-        $jumlah = (int) $jumlahInput;
+        $jumlah = (int) $inputJumlah;
 
         if ($jumlah < 1 || $jumlah > 10) {
-            $pesanError[] = 'Jumlah pembelian harus antara 1 sampai 10.';
+            $pesan = 'Jumlah pembelian harus antara 1 sampai 10.';
+        } else {
+            $jumlahLama = $_SESSION['keranjang'][$kode] ?? 0;
+            $jumlahBaru = $jumlahLama + $jumlah;
+
+            if ($jumlahBaru > 10) {
+                $pesan = 'Gagal! Jumlah menu maksimal 10.';
+            } else {
+                $_SESSION['keranjang'][$kode] = $jumlahBaru;
+                $pesan = 'Menu berhasil ditambahkan ke keranjang.';
+                $tipe = 'success';
+            }
         }
     }
+} elseif ($aksi === 'hapus') {
+    $kode = $_POST['kode_menu'] ?? '';
 
-    if (empty($pesanError)) {
-        $pesanSukses = 'Validasi berhasil! Data pesanan siap diproses.';
+    if (
+        is_string($kode) &&
+        isset($_SESSION['keranjang'][$kode])
+    ) {
+        unset($_SESSION['keranjang'][$kode]);
+        $pesan = 'Item berhasil dihapus.';
+        $tipe = 'success';
+    } else {
+        $pesan = 'Item tidak ditemukan di keranjang.';
     }
+} elseif ($aksi === 'kosongkan') {
+    $_SESSION['keranjang'] = [];
+    $pesan = 'Keranjang berhasil dikosongkan.';
+    $tipe = 'success';
 } else {
-    $pesanError[] = 'Akses ditolak. Silakan kirim pesanan melalui formulir.';
+    $pesan = 'Aksi tidak valid.';
 }
 
-require_once 'includes/header.php';
-?>
+$_SESSION['flash'] = [
+    'pesan' => $pesan,
+    'tipe' => $tipe
+];
 
-<h2>Proses Pemesanan</h2>
-
-<?php if (!empty($pesanError)): ?>
-    <div class="error">
-        <p>Pesanan ditolak:</p>
-        <ul>
-            <?php foreach ($pesanError as $error): ?>
-                <li><?= e($error) ?></li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-<?php else: ?>
-    <p class="success"><?= e($pesanSukses) ?></p>
-
-    <p>Kode menu: <?= e($kode) ?></p>
-    <p>Nama menu: <?= e($menu[$kode]['nama']) ?></p>
-    <p>Jumlah: <?= e($jumlah) ?></p>
-    <p>Harga satuan: Rp<?= number_format(
-        $menu[$kode]['harga'], 0, ',', '.'
-    ) ?></p>
-    <p>Subtotal: Rp<?= number_format(
-        $menu[$kode]['harga'] * $jumlah, 0, ',', '.'
-    ) ?></p>
-
-    <p>Keranjang session akan diimplementasikan pada tahap 4.</p>
-<?php endif; ?>
-
-<p><a href="index.php">Kembali ke daftar menu</a></p>
-
-<?php require_once 'includes/footer.php'; ?>
+header('Location: keranjang.php');
+exit;

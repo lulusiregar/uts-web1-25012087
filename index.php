@@ -1,14 +1,7 @@
 
 <?php
+require_once 'includes/fungsi.php';
 require_once 'data/menu.php';
-
-function e($teks) {
-    return htmlspecialchars(
-        (string) $teks,
-        ENT_QUOTES,
-        'UTF-8'
-    );
-}
 
 $cari = trim($_GET['cari'] ?? '');
 $kategori = $_GET['kategori'] ?? '';
@@ -17,6 +10,7 @@ $hasilMenu = [];
 
 foreach ($menu as $kode => $item) {
     $cocokNama = stripos($item['nama'], $cari) !== false;
+
     $cocokKategori = (
         $kategori === '' ||
         $item['kategori'] === $kategori
@@ -33,7 +27,7 @@ require_once 'includes/header.php';
 <h2>Daftar Menu Kantin</h2>
 
 <form method="GET" action="index.php">
-    <label for="cari">Cari nama menu:</label>
+    <label for="cari">Cari Nama Menu:</label>
     <input
         type="text"
         id="cari"
@@ -60,11 +54,9 @@ require_once 'includes/header.php';
     <a href="index.php">Reset</a>
 </form>
 
-<p>
-    Menampilkan <?= count($hasilMenu) ?> menu.
-</p>
+<p>Menampilkan <?= count($hasilMenu) ?> menu.</p>
 
-<?php if (count($hasilMenu) > 0): ?>
+<?php if (!empty($hasilMenu)): ?>
 
     <table>
         <thead>
@@ -82,14 +74,7 @@ require_once 'includes/header.php';
                     <td><?= e($kode) ?></td>
                     <td><?= e($item['nama']) ?></td>
                     <td><?= e($item['kategori']) ?></td>
-                    <td>
-                        Rp<?= number_format(
-                            $item['harga'],
-                            0,
-                            ',',
-                            '.'
-                        ) ?>
-                    </td>
+                    <td><?= rupiah($item['harga']) ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
@@ -103,7 +88,6 @@ require_once 'includes/header.php';
 
 <?php endif; ?>
 
-
 <hr>
 
 <h2>Form Pemesanan</h2>
@@ -116,7 +100,7 @@ require_once 'includes/header.php';
             <option value="<?= e($kode) ?>">
                 <?= e($kode) ?> -
                 <?= e($item['nama']) ?> -
-                Rp<?= number_format($item['harga'], 0, ',', '.') ?>
+                <?= rupiah($item['harga']) ?>
             </option>
         <?php endforeach; ?>
     </select>
